@@ -1,97 +1,132 @@
 #   !/bin/zsh
+#   ---------------------------------------------
+#   --  FUNCTIONS
+#   ---------------------------------------------
+    export function log
+        echo "$(date +%b\ %d\ %Y) $(whoami) did so and so action" >> ./log &
+
+    export function exit
+        afplay /System/Library/Sounds/Morse.aiff
+        $log
+#   ---------------------------------------------
+
+
+#   ---------------------------------------------
+#   01.  DEFINE INSTRUCTIONS
+#   ---------------------------------------------
+    declare init_step
+    
+    #   -------------------------------
+    #     i. STORE SUDO SESSION
+    #   -------------------------------
+        init_step[1]=$(
+            #   
+            #   get sudo session
+            $exit
+
+
+
+            #sudo -v
+            #   then keep it alive in the
+            #   background while we work
+            #   while true; do
+            #       #   sleep 300
+            #       #   sudo -n true
+            #       kill -0 "$$" 2>/dev/null || exit
+            #   done &
+        )
+    #   -------------------------------
+    #    ii. INSTALL DEPENDENCIES
+    #   -------------------------------
+    #   init_step[2]=$(
+    #       printf "
+    #           need to set up dependencies script $(\n)
+    #           Can I actually automate xcode command line tools install? $(\n)
+    #       "
+    #   )
+    #   xcode-select -p &> /dev/null
+    #   if [ $? -ne 0 ]; then
+    #   echo "Xcode CLI tools not found. Installing them..."
+    #   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+    #   PROD=$(softwareupdate -l |
+    #       grep "\*.*Command Line" |
+    #       head -n 1 | awk -F"*" '{print $2}' |
+    #       sed -e 's/^ *//' |
+    #       tr -d '\n')
+    #   softwareupdate -i "$PROD" -v;
+    #   else
+    #   echo "Xcode CLI tools OK"
+    #   fi
+    #   -------------------------------
+    #   iii. CREATE CONFIG
+    #   -------------------------------
+    #   init_step[3]=$(echo "need to set up config script")
+        #   if ! $(ls ~/.config &> /dev/null); then 
+        #       #   sh -c "mkdir ~/.config" &> /dev/null
+        #       echo "calling logger"
+        #       $log 
+        #   fi
+    #   -------------------------------
+    
+    #   -------------------------------
+    #    iv. DEV ENVIRONMENT
+    #   -------------------------------
+    #   init_step[4]=$(echo "configure dev environment")
+#   ----------------------------------------------
+#   ↦  RUN INSTRUCTIONS
+#   ----------------------------------------------
+    init_current=1
+    while [ $init_current -lt ${#init_step[@]} ]
+    do
+        printf "." \r
+        echo ${init_step[$init_current]}
+        init_current=$(( $init_current + 1 ))
+    done
+
 #   --------------------------------------------
+
+#   case $init_step in
+#       "2")  echo "install dependencies" 
+#           init_step="3"
+#           ;;
+#       "3")  echo "start system config" ;;
+#       "4")  echo "start user config" ;;
+#       *)  echo "get sudo permissions"
+#           init_step="2"
+#           echo $init_step
+#           ;;
+#   esac
 
 #   01. --  Elevate permissions for script  --
 #   --------------------------------------------
-#   A.  get sudoer permission
-    printf "I need root access, enter "
-    sudo -v
-    clear
-#   B.  store sudoer session while we work
-    while true; 
-    do  sudo -n true; 
-        sleep 60; 
-        kill -0 "$$" || exit; 
-    done 2>/dev/null &
+#    echo "sudo script goes here"
+#   --------------------------------------------
+
+#   03. --  Create .config folder  --
+#   --------------------------------------------
+#   if ! (ls ~/.config); then mkdir ~/.config; fi
+#   clear
 #   --------------------------------------------
 
 #   ----
-
-
-
-
-
-
-
-#   --------------------------------------------------------------------------------
-#   TRYING SOMETHING HERE
-#   --------------------------------------------------------------------------------
-xcode-select -p &> /dev/null
-if [ $? -ne 0 ]; then
-  echo "Xcode CLI tools not found. Installing them..."
-  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
-  PROD=$(softwareupdate -l |
-    grep "\*.*Command Line" |
-    head -n 1 | awk -F"*" '{print $2}' |
-    sed -e 's/^ *//' |
-    tr -d '\n')
-  softwareupdate -i "$PROD" -v;
-else
-  echo "Xcode CLI tools OK"
-fi
-#   --------------------------------------------------------------------------------
-
-
-
-#   04. --  Create .config folder  --
-#   --------------------------------------------
-if ! (ls ~/.config); then mkdir ~/.config; fi
-clear
-#   --------------------------------------------
-
-#   ----
-
-
 
 #   01. --  SETUP iCLOUD MOUNT  --
 #   --------------------------------------------
-    #   ->  i.      CHECK USER'S APPLE ID
-    #   --------------------
-    case $(defaults read MobileMeAccounts) in
-        *@*) 
-            #   --------------------------------
-            #   ->  SET iCLOUD ENV VARS
-            #   --------------------------------
-            export whoamicloud=$( defaults read MobileMeAccounts | grep "AccountID" | cut -d \" -f 2 )
-            export icloud="~/Library/Mobile\ Documents/com~apple~CloudDocs"
-            #   --------------------------------
-
-
-            #   --------------------------------
-            #   ->  TEST iCLOUD ENV VARS
-            #   --------------------------------
-            #   echo "$whoamicloud's drive is mounted at $icloud"
-            printenv | grep icloud
-            #   --------------------------------
-            ;;
-        *)  set -e ;;           #   false = quit
-    esac
-    #   ----------------------------------------
-
-    #   ->  ii.    
-    #   ----------------------------------------
-
-    #   --  ii.  Disable saving to iCloud by default
-    #   defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+    
 
 
 
 
 
-#   get system apfs master disk:
-#   diskutil apfs list | grep "(System)" | awk -F'System' '{print $1}' | awk -F':   ' '{print $2}' | awk -F's[0-9]' '{print $1}'
 
-#   diskutil list | grep "Physical Store" |  awk -F'Physical Store ' '{print $2}'
+
+
+
+
+
+
+
+
 
 #   ----------------------------
 #   2.  Install Software
@@ -104,7 +139,7 @@ clear
     #       podman
     #   )
     #   #   2.1.  Install Homebrew
-    #   if ! $(which brew); then NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; fi
+    #   
     #   #   2.2.  Update Homebrew
     #   brew update
     #   brew install ${PACKAGES[@]}
@@ -136,8 +171,8 @@ clear
 
 
 #   Configure Git
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
+#   git config --global user.email "you@example.com"
+#   git config --global user.name "Your Name"
 
 
 
@@ -151,22 +186,22 @@ git config --global user.name "Your Name"
 #   ----------------------------
     #   --  Dock
     #   ------------------------
-    defaults write com.apple.dock show-recents -bool false
-    defaults write com.apple.dock tilesize -integer 1
-    defaults write com.apple.dock autohide -bool true
-    defaults write com.apple.dock autohide-delay -float 10
+    #   defaults write com.apple.dock show-recents -bool false
+    #   defaults write com.apple.dock tilesize -integer 1
+    #   defaults write com.apple.dock autohide -bool true
+    #   defaults write com.apple.dock autohide-delay -float 10
     #   defaults write com.apple.dock autohide-time-modifier -float 1
 
     #   --  Animations
     #   ------------------------
-    defaults write com.apple.dock no-bouncing -bool true
+    #   defaults write com.apple.dock no-bouncing -bool true
 
 
 #   ----------------------------
 #   Mission Control
 #   ----------------------------
     #   Disable rearranging spaces based on recent use
-    defaults write com.apple.dock "mru-spaces" -bool "false"
+    #   defaults write com.apple.dock "mru-spaces" -bool "false"
 
 
 
