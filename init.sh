@@ -3,7 +3,7 @@
 #   --  FUNCTIONS
 #   ---------------------------------------------
     export function log
-        echo "$(date +%b\ %d\ %Y) $(whoami) did so and so action" >> ./log &
+        echo "$(date +%b\ %d\ %Y) $(whoami) did so and so action" >> ./.logs/install.log &
 
     export function exit
         afplay /System/Library/Sounds/Morse.aiff
