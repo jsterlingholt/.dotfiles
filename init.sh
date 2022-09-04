@@ -3,13 +3,18 @@
 #   --  FUNCTIONS
 #   ---------------------------------------------
     export function log
-        echo "$(date +%b\ %d\ %Y) $(whoami) did so and so action" >> ./.logs/install.log &
+        #   echo "$(date +%b\ %d\ %Y) $(whoami) did so and so action" >> ./logs/install.log &
+        echo "testing log"
 
     export function exit
-        afplay /System/Library/Sounds/Morse.aiff
+        sh -c "afplay /System/Library/Sounds/Morse.aiff" &
+        #   $log
+
+    export function success
+        sh -c "afplay /System/Library/Sounds/Morse.aiff" &
+
         $log
 #   ---------------------------------------------
-
 
 #   ---------------------------------------------
 #   01.  DEFINE INSTRUCTIONS
@@ -22,11 +27,11 @@
         init_step[1]=$(
             #   
             #   get sudo session
-            $exit
-
-
-
-            #sudo -v
+            #$exit
+            afplay ./sounds/click.wav &
+            sudo -v
+            
+            
             #   then keep it alive in the
             #   background while we work
             #   while true; do
