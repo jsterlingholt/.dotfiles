@@ -1,0 +1,1 @@
+echo "reusable logging function will go here"
